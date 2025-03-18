@@ -24,6 +24,7 @@ public class ChatManager : MonoBehaviour
     private string systemSet = "You are a friendly counselor. Show empathy in your responses and ask only one short, key question based on the user's answer. The question should guide the conversation further, using kind and respectful language, encouraging the user to open up about their thoughts and feelings.";
 
     private List<object> messages = new List<object>();
+    private string userSpeech;
 
     void Start()
     {
@@ -50,6 +51,38 @@ public class ChatManager : MonoBehaviour
                 
                 // 응답을 메시지 히스토리에 추가
                 messages.Add(new { role = "assistant", content = response });
+
+            }));
+        }
+    }
+
+    //여러 문단으로 말을 하고 있을 때
+    public void speechToMsg(string speech){
+
+        userSpeech = userSpeech + " " + speech;
+        
+    }
+
+    //말이 끝난 것이 감지 되었을 때
+    public void sendMsg(){
+
+        if(string.IsNullOrEmpty(userSpeech)){
+
+            aiChat.text = "준비되시면 말씀해주세요.";
+            
+        }else{
+            userTxt = userSpeech;
+
+            //화면 출력용
+            userChat.text = userTxt;
+
+            UpdateMessages(userTxt);
+            userSpeech = "";
+
+            StartCoroutine(CallAzureOpenAIAsync(userTxt, response => {
+                
+                aiChat.text = response;
+                messages.Add(new { role = "assistant", content = response});
 
             }));
         }

@@ -17,8 +17,8 @@ public class SpeechManager : MonoBehaviour
     private string recognizedString = "";
     private string errorString = "";
     private string languageCode = "ko-KR";
-    private string languageSignal = "korean";
     private SpeechRecognizer recognizer;
+    private ChatManager chat;
 
     //TextMeshProUGUI는 메인스레드에서만 실행이 가능함.
     public Text recognizedText;
@@ -29,7 +29,9 @@ public class SpeechManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
-        
+
+        chat = gameObject.GetComponent<ChatManager>();
+
     }
 
     // Update is called once per frame
@@ -57,6 +59,9 @@ public class SpeechManager : MonoBehaviour
             recognizer.Dispose();
             recognizer = null;
             Debug.Log("Speech Recognizer is now stopped.");
+            
+            //할 말 끝났으니 전송
+            chat.sendMsg();
         }
     }
 
@@ -69,15 +74,15 @@ public class SpeechManager : MonoBehaviour
 
     private async void StartContinuousRecognition(){
         
-        Debug.Log("Starting Continuous Speech Recognition.");
+        //Debug.Log("Starting Continuous Speech Recognition.");
         CreateSpeechRecognizer();
 
         if(recognizer != null){
             
-            Debug.Log("Starting speech Recognizer.");
+            //Debug.Log("Starting speech Recognizer.");
             await recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
         }
-        Debug.Log("Start ContinuousRecognition exit");
+        //Debug.Log("Start ContinuousRecognition exit");
     }
 
     void CreateSpeechRecognizer(){
@@ -99,14 +104,14 @@ public class SpeechManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Create Speech Recognizer Exit");
+        //Debug.Log("Create Speech Recognizer Exit");
     }
 
     
 #region Speech Recognition event handlers
     private void SessionStartedHandler(object sender, SessionEventArgs e)
     {
-        Debug.Log($"\n    Session started event. Event: {e.ToString()}.");
+        //Debug.Log($"\n    Session started event. Event: {e.ToString()}.");
     }
 
     private void SessionStoppedHandler(object sender, SessionEventArgs e)
@@ -123,7 +128,7 @@ public class SpeechManager : MonoBehaviour
     private void SpeechEndDetectedHandler(object sender, RecognitionEventArgs e)
     {
         Debug.Log($"SpeechEndDetected received: offset: {e.Offset}.");
-        Debug.Log($"Speech end detected.");
+        Debug.Log($"Speech end detected.");        
     }
 
     // "Recognizing" events are fired every time we receive interim results during recognition (i.e. hypotheses)
@@ -148,6 +153,9 @@ public class SpeechManager : MonoBehaviour
             lock (threadLocker)
             {
                 recognizedString = $"{Environment.NewLine}{e.Result.Text}";
+
+                //chat에게 메세지 전송
+                chat.speechToMsg(recognizedString);
             }
         }
         else if (e.Result.Reason == ResultReason.NoMatch)
