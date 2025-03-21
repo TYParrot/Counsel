@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/LowStress.unity
     guid: 14a6ba1836562e34486be79858ac6c9c
   - enabled: 1
-    path: Assets/HighStress.unity
+    path: Assets/Beach.unity
     guid: b9c9ee33907b77d4e8760ab67a209458
   - enabled: 1
     path: Assets/AfterCounsel.unity
