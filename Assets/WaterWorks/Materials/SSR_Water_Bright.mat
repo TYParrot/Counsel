@@ -60,7 +60,7 @@ Material:
     - _Cull: 0
     - _Cutoff: 0
     - _CutoffSpeed: -0.4
-    - _Displacement_Amount: 0.2
+    - _Displacement_Amount: 0.02
     - _Displacement_Scale: 1
     - _Displacement_Speed: 0.1
     - _DstBlend: 10
@@ -81,11 +81,11 @@ Material:
     - _SrcBlend: 5
     - _Surface: 1
     - _Tiling: 0.08
-    - _Transparency: 0.85
-    - _UseFoam: 1
+    - _Transparency: 1
+    - _UseFoam: 0
     - _Use_Foam: 1
     - _WaveDist: 1.2
-    - _WaveFrequency: 8
+    - _WaveFrequency: 0.6
     - _WaveSpeed: 0.05
     - _Wave_Speed: 2
     - _WorkflowMode: 1
@@ -93,8 +93,8 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 1
     m_Colors:
-    - _Color: {r: 0, g: 0.38679248, b: 0.31402957, a: 1}
-    - _EdgeColor: {r: 0.5235849, g: 1, b: 0.9100105, a: 1}
+    - _Color: {r: 0, g: 0.6886792, b: 0.55650854, a: 1}
+    - _EdgeColor: {r: 0, g: 0.6901961, b: 0.5568628, a: 1}
     - _Edge_Color: {r: 0.2507565, g: 0.3301887, b: 0.28799033, a: 1}
     - _FoamColor: {r: 7.129739, g: 7.129739, b: 7.129739, a: 1}
     - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
