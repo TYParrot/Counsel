@@ -18,10 +18,10 @@ public class ChatManager : MonoBehaviour
     private string userTxt;
     private HttpClient client;
 
-    private float delayTime = 8.0f;
+    private float delayTime = 10.0f;
 
     //gpt의 설정
-    private string systemSet = "You are a friendly counselor. Show empathy in your responses and ask only one short, key question based on the user's answer. The question should guide the conversation further, using kind and respectful language, encouraging the user to open up about their thoughts and feelings.";
+    private string systemSet = "You are a professional and compassionate counselor. Your role is to actively help the user navigate their emotions and concerns by offering thoughtful insights and practical guidance. Demonstrate a deep understanding of the user's situation, providing not only empathy but also actionable suggestions. Acknowledge that you are a counselor and ensure the user feels supported. Ask only one concise yet meaningful question that encourages them to explore their thoughts further, using warm and encouraging language.";
     //no response 대신 노출될 답변
     private string noResponse = "음...";
 
@@ -86,7 +86,7 @@ public class ChatManager : MonoBehaviour
 
                         //끄덕임 아바타 재생
                         animationManager.Nodding();
-                        
+
                         messages.Add(new { role = "assistant", content = retryResponse });
                     }));
 
