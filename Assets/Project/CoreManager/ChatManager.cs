@@ -13,18 +13,23 @@ using ApiConfig;
 
 public class ChatManager : MonoBehaviour
 {
-    public TextMeshProUGUI aiChat; 
+    public string aiChat; 
     public TMP_InputField userChat;
     private string userTxt;
     private HttpClient client;
 
-    private float delayTime = 15.0f;
+    private float delayTime = 8.0f;
 
     //gpt의 설정
     private string systemSet = "You are a friendly counselor. Show empathy in your responses and ask only one short, key question based on the user's answer. The question should guide the conversation further, using kind and respectful language, encouraging the user to open up about their thoughts and feelings.";
+    //no response 대신 노출될 답변
+    private string noResponse = "음...";
 
     private List<object> messages = new List<object>();
     private string userSpeech;
+    
+    public TTSManager ttsManager;
+    public AnimationManager animationManager;
 
     void Start()
     {
@@ -33,12 +38,28 @@ public class ChatManager : MonoBehaviour
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiCollection.chatApiKey}");
         client.DefaultRequestHeaders.Add("api-key", ApiCollection.chatApiKey);
         messages.Add( new { role = "system", content = systemSet });
+
+        //변수 초기화
+        if(ttsManager == null){
+            ttsManager = GameObject.Find("TTSManager").GetComponent<TTSManager>();
+        }
+
+        if(animationManager == null){
+            animationManager = GameObject.Find("AnimationManager").GetComponent<AnimationManager>();
+        }
     }
 
     public void btn1(){
         
         if(string.IsNullOrWhiteSpace(userChat.text)){
-            aiChat.text = "준비되시면 말씀해주세요.";
+            aiChat = "준비되시면 말씀해주세요.";
+            
+            //TTS 호출
+            ttsManager.TTSStart(aiChat);
+            
+            //끄덕임 아바타 재생
+            animationManager.Nodding();
+
         }else{
             userTxt = userChat.text;
 
@@ -47,10 +68,39 @@ public class ChatManager : MonoBehaviour
             
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response =>
             {
-                aiChat.text = response;
-                
-                // 응답을 메시지 히스토리에 추가
-                messages.Add(new { role = "assistant", content = response });
+                aiChat = response;
+
+                //"no response"시 재요청
+                if(aiChat == "No response"){
+                    
+                    aiChat = noResponse;
+                    ttsManager.TTSStart(aiChat);
+
+                    //재전송 전 Delay
+                    StartCoroutine(ReSendMsgToGpt());
+                    StartCoroutine(CallAzureOpenAIAsync(userTxt, retryResponse =>{
+                        aiChat = retryResponse;
+                        
+                        //TTS 호출
+                        ttsManager.TTSStart(aiChat);
+
+                        //끄덕임 아바타 재생
+                        animationManager.Nodding();
+                        
+                        messages.Add(new { role = "assistant", content = retryResponse });
+                    }));
+
+                }else{
+                    aiChat = response;
+
+                    //TTS 호출
+                    ttsManager.TTSStart(aiChat);
+                    
+                    //끄덕임 아바타 재생
+                    animationManager.Nodding();
+
+                    messages.Add(new { role = "assistant", content = response });
+                }
 
             }));
         }
@@ -68,7 +118,7 @@ public class ChatManager : MonoBehaviour
 
         if(string.IsNullOrEmpty(userSpeech)){
 
-            aiChat.text = "준비되시면 말씀해주세요.";
+            aiChat = "준비되시면 말씀해주세요.";
             
         }else{
             userTxt = userSpeech;
@@ -81,7 +131,7 @@ public class ChatManager : MonoBehaviour
 
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response => {
                 
-                aiChat.text = response;
+                aiChat = response;
                 messages.Add(new { role = "assistant", content = response});
 
             }));
@@ -140,6 +190,10 @@ public class ChatManager : MonoBehaviour
 
         // Unity에서 UI 업데이트를 위해 콜백 사용
         callback?.Invoke(resultText);
+    }
+
+    public IEnumerator ReSendMsgToGpt(){
+        yield return new WaitForSeconds(delayTime);
     }
 
 }
