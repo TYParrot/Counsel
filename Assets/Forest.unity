@@ -2220,7 +2220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &256584317
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2236,9 +2236,9 @@ RectTransform:
   - {fileID: 990011229}
   m_Father: {fileID: 58045276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 240, y: -15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &256584318
@@ -3625,7 +3625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &715448813
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3641,9 +3641,9 @@ RectTransform:
   - {fileID: 383568763}
   m_Father: {fileID: 58045276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 80, y: -15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &715448814
@@ -5940,19 +5940,19 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: bea63b6083163f247878bb28fe8da8be, type: 2}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.97
+      value: -7.26
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5960,23 +5960,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.022
+      value: -4.53
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9012182
+      value: 0.99984777
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.43336573
+      value: -0.01745245
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5984,7 +5984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 51.363
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 3362277656326402154, guid: 0ef0c8319059de14ba2fcddc3b3dfa17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -6354,7 +6354,7 @@ MonoBehaviour:
   aiChat: 
   userChat: {fileID: 264730448}
   ttsManager: {fileID: 1316553084}
-  animationManager: {fileID: 0}
+  animationManager: {fileID: 1979280862}
 --- !u!114 &1849615875
 MonoBehaviour:
   m_ObjectHideFlags: 0

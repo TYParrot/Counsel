@@ -18,7 +18,7 @@ public class ChatManager : MonoBehaviour
     private string userTxt;
     private HttpClient client;
 
-    private float delayTime = 10.0f;
+    private float delayTime = 3.0f;
 
     //gpt의 설정
     private string systemSet = "You are a professional and compassionate counselor. Your role is to actively help the user navigate their emotions and concerns by offering thoughtful insights and practical guidance. Demonstrate a deep understanding of the user's situation, providing not only empathy but also actionable suggestions. Acknowledge that you are a counselor and ensure the user feels supported. Ask only one concise yet meaningful question that encourages them to explore their thoughts further, using warm and encouraging language.";
@@ -166,7 +166,7 @@ public class ChatManager : MonoBehaviour
         {
             messages = messages.ToArray(),
             max_tokens = 400,
-            temperature = 0.8
+            temperature = 0.2
         };
 
         string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
