@@ -52,7 +52,7 @@ public class MainManager : MonoBehaviour
     //씬이 완전히 로드된 이후에 호출됨
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        var receiver = GameObject.Find("SceneReceiver")?.GetComponent<SceneDataReceiver>();
+        var receiver = GameObject.Find("===Manager===")?.GetComponent<SceneDataReceiver>();
         if (receiver != null)
         {
             receiver.ReceiveData(nextSceneExtremeQ);

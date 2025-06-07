@@ -16,12 +16,13 @@ public class ChatManager : MonoBehaviour
     public string aiChat; 
     public TMP_InputField userChat;
     private string userTxt;
+    public TMP_InputField aiText;
     private HttpClient client;
 
     private float delayTime = 3.0f;
 
     //gpt의 설정
-    private string systemSet = "You are a professional and compassionate counselor. Your role is to actively help the user navigate their emotions and concerns by offering thoughtful insights and practical guidance. Demonstrate a deep understanding of the user's situation, providing not only empathy but also actionable suggestions. Acknowledge that you are a counselor and ensure the user feels supported. Ask only one concise yet meaningful question that encourages them to explore their thoughts further, using warm and encouraging language.";
+    private string systemSet = "You are a professional and compassionate counselor. Your role is to actively help the user navigate their emotions and concerns by offering thoughtful insights and practical guidance. Demonstrate a deep understanding of the user's situation, providing not only empathy but also actionable suggestions. Acknowledge that you are a counselor and ensure the user feels supported. Ask only one concise yet meaningful question that encourages them to explore their thoughts further, using warm and encouraging language. say Korean. 답변은 한국어로.";
     //no response 대신 노출될 답변
     private string noResponse = "음...";
 
@@ -31,8 +32,13 @@ public class ChatManager : MonoBehaviour
     public TTSManager ttsManager;
     public AnimationManager animationManager;
 
+    public SceneDataReceiver receiver;
+
     void Start()
     {
+        //추가 극단적 문항 받아 가이드라인 생성하기.
+        systemSet += "\nAdditionally, here are the questions the user responded to in an extreme way. Please consider them during care:\n" + receiver.GetExtremeQ();
+
         // HttpClient를 한 번만 초기화
         client = new HttpClient();
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiCollection.chatApiKey}");
@@ -49,24 +55,13 @@ public class ChatManager : MonoBehaviour
         }
     }
 
-    public void UpdateSystemSet(string extremeQ)
-    {
-        systemSet += "\nAdditionally, here are the questions the user responded to in an extreme way. Please consider them during care:\n" + extremeQ;
-
-        // system message 업데이트
-        if (messages.Count > 0 && messages[0] is { })
-        {
-            messages[0] = new { role = "system", content = systemSet };
-        }
-    }
-
-
     public void btn1()
     {
 
         if (string.IsNullOrWhiteSpace(userChat.text))
         {
             aiChat = "준비되시면 말씀해주세요.";
+            aiText.text = aiChat;
 
             //TTS 호출
             ttsManager.TTSStart(aiChat);
@@ -85,6 +80,7 @@ public class ChatManager : MonoBehaviour
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response =>
             {
                 aiChat = response;
+                aiText.text = aiChat;
 
                 //"no response"시 재요청
                 if (aiChat == "No response")
@@ -98,6 +94,7 @@ public class ChatManager : MonoBehaviour
                     StartCoroutine(CallAzureOpenAIAsync(userTxt, retryResponse =>
                     {
                         aiChat = retryResponse;
+                        aiText.text = aiChat;
 
                         //TTS 호출
                         ttsManager.TTSStart(aiChat);
@@ -112,6 +109,7 @@ public class ChatManager : MonoBehaviour
                 else
                 {
                     aiChat = response;
+                    aiText.text = response;
 
                     //TTS 호출
                     ttsManager.TTSStart(aiChat);
@@ -152,6 +150,7 @@ public class ChatManager : MonoBehaviour
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response => {
                 
                 aiChat = response;
+                aiText.text = response;
                 messages.Add(new { role = "assistant", content = response});
 
             }));
