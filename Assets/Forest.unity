@@ -1838,8 +1838,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AnotherREST, Assembly-CSharp
+      - m_Target: {fileID: 1849615874}
+        m_TargetAssemblyTypeName: ChatManager, Assembly-CSharp
         m_MethodName: btn1
         m_Mode: 1
         m_Arguments:
@@ -2223,7 +2223,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1849615875}
         m_TargetAssemblyTypeName: SpeechManager, Assembly-CSharp
         m_MethodName: StopRecognition
         m_Mode: 1
@@ -6243,7 +6243,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1849615875}
         m_TargetAssemblyTypeName: SpeechManager, Assembly-CSharp
         m_MethodName: StartContinuous
         m_Mode: 1

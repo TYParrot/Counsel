@@ -28,10 +28,10 @@ public class SpeechManager : MonoBehaviour
     //private TranslationRecognizer translator; //번역
 
     // Start is called before the first frame update
-    void Start(){
+    void Start()
+    {
 
         chat = gameObject.GetComponent<ChatManager>();
-
     }
 
     // Update is called once per frame
@@ -91,9 +91,13 @@ public class SpeechManager : MonoBehaviour
             
             SpeechConfig speechConfig = SpeechConfig.FromSubscription(ApiCollection.speechApiKey, ApiCollection.speechRegion);
             speechConfig.SpeechRecognitionLanguage = languageCode;
-            recognizer = new SpeechRecognizer(speechConfig);
+            //recognizer = new SpeechRecognizer(speechConfig);
+            var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+recognizer = new SpeechRecognizer(speechConfig, audioConfig);
 
-            if(recognizer != null){
+
+            if (recognizer != null)
+            {
                 recognizer.Recognizing += RecognizingHandler;
                 recognizer.Recognized += RecognizedHandler;
                 recognizer.SpeechStartDetected += SpeechStartDetectedHandler;

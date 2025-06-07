@@ -21,7 +21,6 @@ PluginImporter:
         'Exclude ': 1
         Exclude Android: 1
         Exclude CloudRendering: 1
-        Exclude Editor: 0
         Exclude EmbeddedLinux: 1
         Exclude GameCoreScarlett: 1
         Exclude GameCoreXboxOne: 1
@@ -35,18 +34,10 @@ PluginImporter:
         Exclude VisionOS: 1
         Exclude WebGL: 1
         Exclude Win: 1
-        Exclude Win64: 0
         Exclude WindowsStoreApps: 1
         Exclude XboxOne: 1
         Exclude iOS: 1
         Exclude tvOS: 1
-  - first:
-      Android: Android
-    second:
-      enabled: 0
-      settings:
-        AndroidSharedLibraryType: Executable
-        CPU: ARMv7
   - first:
       Any: 
     second:
@@ -57,42 +48,13 @@ PluginImporter:
     second:
       enabled: 1
       settings:
-        CPU: AnyCPU
-        DefaultValueInitialized: true
         OS: Windows
-  - first:
-      Standalone: Linux64
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: OSXUniversal
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Win
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
   - first:
       Standalone: Win64
     second:
       enabled: 1
       settings:
         CPU: x86_64
-  - first:
-      iPhone: iOS
-    second:
-      enabled: 0
-      settings:
-        AddToEmbeddedBinaries: false
-        CPU: AnyCPU
-        CompileFlags: 
-        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
