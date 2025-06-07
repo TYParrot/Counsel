@@ -20,14 +20,11 @@ public class MainManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void ParamUpdate(int survey, int[] submits, List<string[]> surveyQuestion)
+    public void ParamUpdate(string extremeQ)
     {
-        surveyScore = survey;
         
-        userSubmits = new int[submits.Length];
-        submits.CopyTo(userSubmits, 0);
+        Debug.Log("극단적인 응답 문항:\n" + extremeQ);
 
-        surveyQuest = new List<string[]>(surveyQuestion);
     }
 
     public void GenderUpdate(bool male){
