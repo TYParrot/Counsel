@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//만약 gsr과 survey를 종합평가해서 최종점수가 나온다면 MainManager에서 처리.
 public class MainManager : MonoBehaviour
 {
     private int surveyScore;
@@ -38,19 +37,6 @@ public class MainManager : MonoBehaviour
         return surveyScore;
     }
 
-    public int ReturnBeforeGsrScore(){
-        return beforeGsrScore;
-    }
-
-    public void AfterGsrScoreUpdate(int gsr){
-        afterGsrScore = gsr;
-    }
-
-    public int ReturnAfterGsrScore(){
-        return afterGsrScore;
-    }
-
-
     public void GenderUpdate(bool male){
         isMale = male;
     }
@@ -60,16 +46,12 @@ public class MainManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void LoadLowStress(){
+    public void LoadForest(){
         SceneManager.LoadScene(1);
     }
     
-    public void LoadHighStress(){
+    public void LoadBeach(){
         SceneManager.LoadScene(2);
-    }
-    
-    public void LoadAfterCounsel(){
-        SceneManager.LoadScene(3);
     }
 
 }
