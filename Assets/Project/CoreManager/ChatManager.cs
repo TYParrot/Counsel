@@ -49,38 +49,56 @@ public class ChatManager : MonoBehaviour
         }
     }
 
-    public void btn1(){
-        
-        if(string.IsNullOrWhiteSpace(userChat.text)){
+    public void UpdateSystemSet(string extremeQ)
+    {
+        systemSet += "\nAdditionally, here are the questions the user responded to in an extreme way. Please consider them during care:\n" + extremeQ;
+
+        // system message 업데이트
+        if (messages.Count > 0 && messages[0] is { })
+        {
+            messages[0] = new { role = "system", content = systemSet };
+        }
+    }
+
+
+    public void btn1()
+    {
+
+        if (string.IsNullOrWhiteSpace(userChat.text))
+        {
             aiChat = "준비되시면 말씀해주세요.";
-            
+
             //TTS 호출
             ttsManager.TTSStart(aiChat);
-            
+
             //끄덕임 아바타 재생
             animationManager.Nodding();
 
-        }else{
+        }
+        else
+        {
             userTxt = userChat.text;
 
             UpdateMessages(userTxt);
             userChat.text = "";
-            
+
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response =>
             {
                 aiChat = response;
 
                 //"no response"시 재요청
-                if(aiChat == "No response"){
-                    
+                if (aiChat == "No response")
+                {
+
                     aiChat = noResponse;
                     ttsManager.TTSStart(aiChat);
 
                     //재전송 전 Delay
                     StartCoroutine(ReSendMsgToGpt());
-                    StartCoroutine(CallAzureOpenAIAsync(userTxt, retryResponse =>{
+                    StartCoroutine(CallAzureOpenAIAsync(userTxt, retryResponse =>
+                    {
                         aiChat = retryResponse;
-                        
+
                         //TTS 호출
                         ttsManager.TTSStart(aiChat);
 
@@ -90,12 +108,14 @@ public class ChatManager : MonoBehaviour
                         messages.Add(new { role = "assistant", content = retryResponse });
                     }));
 
-                }else{
+                }
+                else
+                {
                     aiChat = response;
 
                     //TTS 호출
                     ttsManager.TTSStart(aiChat);
-                    
+
                     //끄덕임 아바타 재생
                     animationManager.Nodding();
 
