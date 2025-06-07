@@ -27,6 +27,8 @@ public class SurveyManager : MonoBehaviour
     #endregion
 
     public GameObject mainManager;
+    private string extremeQuestions = "";
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,21 +38,24 @@ public class SurveyManager : MonoBehaviour
 
         QuestTextSet(0);
 
-        if(choiceGroup == null){
+        if (choiceGroup == null)
+        {
 
             choiceGroup = GameObject.Find("choiceGroup_Survey");
 
-        }            
-        
+        }
+
         toggles = new Toggle[choiceGroup.transform.childCount];
-        
-        for(int i = 0; i < toggles.Length; i++){
+
+        for (int i = 0; i < toggles.Length; i++)
+        {
 
             toggles[i] = choiceGroup.transform.GetChild(i).GetComponent<Toggle>();
 
         }
 
-        if(mainManager == null){
+        if (mainManager == null)
+        {
             mainManager = GameObject.Find("MainManager");
         }
 
@@ -59,9 +64,11 @@ public class SurveyManager : MonoBehaviour
     }
 
     //json 파일에서 질문 목록 불러오기
-    void LoadQuestion(){
-        
-        if(!File.Exists(path)){
+    void LoadQuestion()
+    {
+
+        if (!File.Exists(path))
+        {
             Debug.LogError("Survey Json 파일이 존재하지 않습니다.");
             return;
         }
@@ -70,64 +77,91 @@ public class SurveyManager : MonoBehaviour
         QuestionData qData = JsonConvert.DeserializeObject<QuestionData>(json);
 
         //변수에 할당
-        if(qData != null && qData.questions != null){
+        if (qData != null && qData.questions != null)
+        {
             surveyQuestion = new List<string[]>(qData.questions);
-        }else{
+        }
+        else
+        {
             Debug.LogError("Survey Json 파일이 올바르지 않습니다.");
         }
     }
 
-    public void QuestTextSet(int num){
+    public void QuestTextSet(int num)
+    {
 
         question.text = surveyQuestion[num][0];
 
     }
 
     //점수 계산
-    void CalculateScore(){
-        
-        for(int i = 0; i < surveyQuestion.Count; i++){
+    void CalculateScore()
+    {
 
-            if(surveyQuestion[i][1].Equals("+")){
-                
-                surveyScore += toggles.Length - userSubmits[i] -1;
+        for (int i = 0; i < surveyQuestion.Count; i++)
+        {
 
-            }else{
+            if (surveyQuestion[i][1].Equals("+"))
+            {
+
+                surveyScore += toggles.Length - userSubmits[i] - 1;
+
+            }
+            else
+            {
                 surveyScore += userSubmits[i];
             }
         }
 
-        mainManager.GetComponent<MainManager>().ParamUpdate(surveyScore, userSubmits, surveyQuestion);
+        // 극단적인 응답 문항 문자열 생성
+        List<string> extremeList = new List<string>();
+        for (int i = 0; i < userSubmits.Length; i++)
+        {
+            if (userSubmits[i] == 0 || userSubmits[i] == toggles.Length - 1)
+            {
+                extremeList.Add($"Q{i + 1}. {surveyQuestion[i][0]}");
+            }
+        }
+        extremeQuestions = string.Join("\n", extremeList);
+
+        // MainManager에 추가로 전달
+        mainManager.GetComponent<MainManager>().ParamUpdate(extremeQuestions);
 
     }
-    
+
     //다음 및 제출 버튼 이벤트
-    public void SubmitBtn(){
+    public void SubmitBtn()
+    {
 
         //토글이 모두 비어있는지 확인하고, 체크되었다면 몇 점짜리인지 기록.
-        for(int i = 0; i < toggles.Length; i++){
+        for (int i = 0; i < toggles.Length; i++)
+        {
 
-            if(toggles[i].isOn){
+            if (toggles[i].isOn)
+            {
 
                 userSubmits[questionNumber] = i;
                 isChecked = true;
             }
         }
-        
+
         //토글 항목이 하나도 체크되지 않았다면, nullText를 띄우기.
-        if(!isChecked){
+        if (!isChecked)
+        {
             nullText.text = "필수 확인 항목입니다.";
             return;
         }
-        
+
         //마지막 질문이면 제출 처리
         questionNumber++;
 
-        if(questionNumber < surveyQuestion.Count){
+        if (questionNumber < surveyQuestion.Count)
+        {
 
             nullText.text = "";
 
-            for(int i = 0; i<toggles.Length; i++){
+            for (int i = 0; i < toggles.Length; i++)
+            {
 
                 toggles[i].isOn = false;
 
@@ -135,8 +169,10 @@ public class SurveyManager : MonoBehaviour
 
             QuestTextSet(questionNumber);
 
-        }else{
-            
+        }
+        else
+        {
+
             CalculateScore();
             gameObject.SetActive(false);
             resultPanel.SetActive(true);

@@ -13,44 +13,112 @@ using ApiConfig;
 
 public class ChatManager : MonoBehaviour
 {
-    public TextMeshProUGUI aiChat; 
+    public string aiChat; 
     public TMP_InputField userChat;
     private string userTxt;
+    public TMP_InputField aiText;
     private HttpClient client;
 
-    private float delayTime = 15.0f;
+    private float delayTime = 3.0f;
 
     //gpt의 설정
-    private string systemSet = "You are a friendly counselor. Show empathy in your responses and ask only one short, key question based on the user's answer. The question should guide the conversation further, using kind and respectful language, encouraging the user to open up about their thoughts and feelings.";
+    private string systemSet = "You are a professional and compassionate counselor. Your role is to actively help the user navigate their emotions and concerns by offering thoughtful insights and practical guidance. Demonstrate a deep understanding of the user's situation, providing not only empathy but also actionable suggestions. Acknowledge that you are a counselor and ensure the user feels supported. Ask only one concise yet meaningful question that encourages them to explore their thoughts further, using warm and encouraging language. say Korean. 답변은 한국어로.";
+    //no response 대신 노출될 답변
+    private string noResponse = "음...";
 
     private List<object> messages = new List<object>();
     private string userSpeech;
+    
+    public TTSManager ttsManager;
+    public AnimationManager animationManager;
+
+    public SceneDataReceiver receiver;
 
     void Start()
     {
+        //추가 극단적 문항 받아 가이드라인 생성하기.
+        systemSet += "\nAdditionally, here are the questions the user responded to in an extreme way. Please consider them during care:\n" + receiver.GetExtremeQ();
+
         // HttpClient를 한 번만 초기화
         client = new HttpClient();
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiCollection.chatApiKey}");
         client.DefaultRequestHeaders.Add("api-key", ApiCollection.chatApiKey);
         messages.Add( new { role = "system", content = systemSet });
+
+        //변수 초기화
+        if(ttsManager == null){
+            ttsManager = GameObject.Find("TTSManager").GetComponent<TTSManager>();
+        }
+
+        if(animationManager == null){
+            animationManager = GameObject.Find("AnimationManager").GetComponent<AnimationManager>();
+        }
     }
 
-    public void btn1(){
-        
-        if(string.IsNullOrWhiteSpace(userChat.text)){
-            aiChat.text = "준비되시면 말씀해주세요.";
-        }else{
+    public void btn1()
+    {
+
+        if (string.IsNullOrWhiteSpace(userChat.text))
+        {
+            aiChat = "준비되시면 말씀해주세요.";
+            aiText.text = aiChat;
+
+            //TTS 호출
+            ttsManager.TTSStart(aiChat);
+
+            //끄덕임 아바타 재생
+            animationManager.Nodding();
+
+        }
+        else
+        {
             userTxt = userChat.text;
 
             UpdateMessages(userTxt);
             userChat.text = "";
-            
+
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response =>
             {
-                aiChat.text = response;
-                
-                // 응답을 메시지 히스토리에 추가
-                messages.Add(new { role = "assistant", content = response });
+                aiChat = response;
+                aiText.text = aiChat;
+
+                //"no response"시 재요청
+                if (aiChat == "No response")
+                {
+
+                    aiChat = noResponse;
+                    ttsManager.TTSStart(aiChat);
+
+                    //재전송 전 Delay
+                    StartCoroutine(ReSendMsgToGpt());
+                    StartCoroutine(CallAzureOpenAIAsync(userTxt, retryResponse =>
+                    {
+                        aiChat = retryResponse;
+                        aiText.text = aiChat;
+
+                        //TTS 호출
+                        ttsManager.TTSStart(aiChat);
+
+                        //끄덕임 아바타 재생
+                        animationManager.Nodding();
+
+                        messages.Add(new { role = "assistant", content = retryResponse });
+                    }));
+
+                }
+                else
+                {
+                    aiChat = response;
+                    aiText.text = response;
+
+                    //TTS 호출
+                    ttsManager.TTSStart(aiChat);
+
+                    //끄덕임 아바타 재생
+                    animationManager.Nodding();
+
+                    messages.Add(new { role = "assistant", content = response });
+                }
 
             }));
         }
@@ -68,7 +136,7 @@ public class ChatManager : MonoBehaviour
 
         if(string.IsNullOrEmpty(userSpeech)){
 
-            aiChat.text = "준비되시면 말씀해주세요.";
+            aiChat = "준비되시면 말씀해주세요.";
             
         }else{
             userTxt = userSpeech;
@@ -81,7 +149,8 @@ public class ChatManager : MonoBehaviour
 
             StartCoroutine(CallAzureOpenAIAsync(userTxt, response => {
                 
-                aiChat.text = response;
+                aiChat = response;
+                aiText.text = response;
                 messages.Add(new { role = "assistant", content = response});
 
             }));
@@ -116,7 +185,7 @@ public class ChatManager : MonoBehaviour
         {
             messages = messages.ToArray(),
             max_tokens = 400,
-            temperature = 0.8
+            temperature = 0.2
         };
 
         string json = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
@@ -140,6 +209,10 @@ public class ChatManager : MonoBehaviour
 
         // Unity에서 UI 업데이트를 위해 콜백 사용
         callback?.Invoke(resultText);
+    }
+
+    public IEnumerator ReSendMsgToGpt(){
+        yield return new WaitForSeconds(delayTime);
     }
 
 }
