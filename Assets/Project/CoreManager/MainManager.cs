@@ -30,27 +30,6 @@ public class MainManager : MonoBehaviour
         surveyQuest = new List<string[]>(surveyQuestion);
     }
 
-    public void BeforeGsrScoreUpdate(int gsr){
-        beforeGsrScore = gsr;
-    }
-
-    public int ReturnSurveyScore(){
-        return surveyScore;
-    }
-
-    public int ReturnBeforeGsrScore(){
-        return beforeGsrScore;
-    }
-
-    public void AfterGsrScoreUpdate(int gsr){
-        afterGsrScore = gsr;
-    }
-
-    public int ReturnAfterGsrScore(){
-        return afterGsrScore;
-    }
-
-
     public void GenderUpdate(bool male){
         isMale = male;
     }
@@ -60,16 +39,12 @@ public class MainManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void LoadLowStress(){
-        SceneManager.LoadScene(1);
-    }
-    
-    public void LoadHighStress(){
+    public void LoadForest(){
         SceneManager.LoadScene(2);
     }
     
-    public void LoadAfterCounsel(){
-        SceneManager.LoadScene(3);
+    public void LoadBeach(){
+        SceneManager.LoadScene(1);
     }
-
+    
 }
