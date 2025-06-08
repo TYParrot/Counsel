@@ -38,6 +38,14 @@
 - Microsoft **Azure Cognitive Services** API 키 필요  
   ![api 코드 예시](https://github.com/user-attachments/assets/1ea2c8c9-9167-479a-9cf2-739a61b29ede)
 - **OpenXR 기반 VR 디바이스** 사용 권장 (예: Meta Quest 2), 마이크
+- 사용된 SDK 및 라이브러리
+  
+| SDK/패키지 이름 | 용도 |
+|------------------|------|
+| NuGetForUnity | Unity에서 NuGet 패키지 설치 및 관리 |
+| Azure Cognitive Services Speech SDK | STT(Speech-to-Text), TTS(Text-to-Speech) |
+| Azure OpenAI Chat API 연동 | ChatGPT 기반 상담 응답 생성 |
+| OVR LipSync for Unity | 아바타 립싱크(입 모양) 구현 |
 
 ---
 
